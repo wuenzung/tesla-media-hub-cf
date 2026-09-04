@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2025-05-01"
 
 # Cloudflare 账号 ID（来自 CF 后台右上角「账户 ID」，或 `npx wrangler whoami`）
-account_id = "8b493efbb872f843f709cb16f0c8effc"
+account_id = "a8f175dafb22a1dc8aad24a58e43e918"
 
 # 静态资源（前端 public/）由 Cloudflare 静态资产直接托管，无需 /api 的请求会回退到这里
 [assets]
