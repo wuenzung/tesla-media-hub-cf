@@ -1,0 +1,14 @@
+{
+  "name": "tesla-media-hub-cf",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "tesla-media-hub 的 Cloudflare Worker 版（前端静态资源 + AppleCMS 点播 API，已移除 IPTV/ffmpeg）",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  }
+}

@@ -1,0 +1,37 @@
+name = "tesla-media-hub-cf"
+main = "src/index.js"
+compatibility_date = "2025-05-01"
+
+# Cloudflare 账号 ID（来自 CF 后台右上角「账户 ID」，或 `npx wrangler whoami`）
+account_id = "8b493efbb872f843f709cb16f0c8effc"
+
+# 静态资源（前端 public/）由 Cloudflare 静态资产直接托管，无需 /api 的请求会回退到这里
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# hash 路由，未匹配文件回退到 index.html（无害，主要用于直接深链）
+not_found_handling = "single-page-application"
+
+# 持久化：源配置 / 管理员账号 存到 KV（替代原 Docker 的 data/ 磁盘卷）
+# 绑定名 TMH_KV 已固定；只需把下面的 id 换成你在 CF 后台 KV 命名空间详情页看到的「ID」
+# （Workers & Pages → KV → 点你的命名空间 → 详情页的 ID，形如 32 位十六进制）
+[[kv_namespaces]]
+binding = "TMH_KV"
+id = "d05debde42404e8fa78220f6acf079d8"
+
+[vars]
+# 首次部署的默认管理员账号（部署后仍可在管理后台网页修改，修改后写入 KV 覆盖此处）
+ADMIN_USER = "admin"
+ADMIN_PASS = "admin123"
+
+# WebDAV 网盘配置：此为「fallback」。优先使用 /admin 后台页面写入 KV 的配置（无需改此文件、无需重新部署）。
+# 若两者都未设置，「WebDAV 网盘」入口会提示未配置。
+# WEBDAV_BASE 形如 https://dav.example.com:5006/dav
+# 注意：明文写在此处会进入 Git 仓库，建议优先使用 /admin 后台配置，或用 Secret 覆盖（见下方 TMH_SECRET 说明）。
+WEBDAV_BASE = "admin"
+WEBDAV_USER = "admin"
+WEBDAV_PASS = "admin"
+
+# 重要：登录态签名密钥请通过 Secrets 设置（不写进仓库）：
+#   npx wrangler secret put TMH_SECRET
+# 不设置时 worker 会在每次冷启动随机生成一个密钥，登录在重启后失效（仅适合快速试跑）。

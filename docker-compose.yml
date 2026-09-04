@@ -1,0 +1,28 @@
+# 一键部署（从 Docker Hub 拉取镜像，无需本地构建）
+# 使用：docker compose up -d
+# 镜像由作者推送：docker.io/yan527754498/tesla-media-hub:latest
+services:
+  tesla-media-hub:
+    image: yan527754498/tesla-media-hub:latest
+    container_name: tesla-media-hub
+    ports:
+      - "6969:6969"
+    volumes:
+      # 源配置 / 管理员账号 持久化（不会进镜像，运行时挂载）
+      - ./data:/app/data
+    environment:
+      - PORT=6969
+      - TZ=Asia/Shanghai
+      # 管理员账号密码（强烈建议首次部署即修改为强密码；可在管理后台网页修改）
+      - ADMIN_USER=admin
+      - ADMIN_PASS=admin123
+      # IPTV 直播流安全开关（默认开启鉴权 + 并发上限）
+      #   IPTV_AUTH=true  -> 播放 IPTV 频道需携带管理员 token（前端已自动附带）
+      #   IPTV_AUTH=false -> 关闭鉴权（仅限可信内网，不建议公网开启）
+      - IPTV_AUTH=true
+      # 服务端同时转码/代理的 IPTV 流上限，超过返回 429（防 ffmpeg 被无限拉起）
+      - IPTV_MAX_CONCURRENT=4
+      # NAS 家庭宽带无法直连影视源时，取消注释并填入代理地址（仅用于服务端拉取源站元数据/图片）
+      # - HTTPS_PROXY=http://192.168.x.x:7890
+      # - HTTP_PROXY=http://192.168.x.x:7890
+    restart: unless-stopped

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0f1115">
+  <title>车载影视</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="topbar">
+    <button id="btn-back" class="btn-back" onclick="historyBack()">‹</button>
+    <div class="title-wrap">
+      <span id="page-title">车载影视</span>
+      <span id="page-sub" class="page-sub"></span>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <!-- 播放器全屏层 -->
+  <div id="player-layer" class="player-layer hidden">
+    <div class="player-shell">
+      <div class="player-head">
+        <div class="player-head-left">
+          <button class="player-close" onclick="closePlayer()" aria-label="关闭"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+          <button class="quality-btn" id="btn-quality" style="display:none" onclick="cycleQuality()">清晰度</button>
+        </div>
+        <div class="player-title" id="player-title"></div>
+      </div>
+      <div id="player-box">
+        <!-- AppleCMS 点播：车机本地 WebCodecs 解码到 Canvas（tesla-media-hub 内置播放库，无 video 标签） -->
+        <div id="drive-view" class="drive-view hidden">
+          <div id="tesla-host"></div>
+        </div>
+        <!-- IPTV：服务端 ffmpeg 转码推流 → tesla-media-hub 内置播放库拉流播放 -->
+        <div id="iptv-view" class="drive-view hidden">
+          <div id="iptv-host"></div>
+        </div>
+      </div>
+      <div class="ep-strip" id="ep-strip"></div>
+    </div>
+  </div>
+
+  <!-- 模态框 -->
+  <div id="modal" class="modal hidden"></div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/iptv-player.js" type="module"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
